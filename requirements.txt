@@ -4,3 +4,4 @@ pillow
 selenium
 scipy
 gunicorn
+flask
