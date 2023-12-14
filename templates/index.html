@@ -35,9 +35,15 @@
         <h1>GCP Dot Random String</h1>
         
         <form action="/" method="post">
-            <input type="number" name="length" min="1" max="1000" placeholder="Enter string length (default 128)">
+            <input type="number" name="length" min="1" max="1000" placeholder="Enter string length (default 128 | Min 1| Max 1000)">
             <input type="submit" value="Generate">
         </form>
+
+        <!-- Display the error message if it exists -->
+        {% if error_message %}
+            <p style="color: red;">{{ error_message }}</p>
+        {% endif %}
+
 
         <p class="random-string">{{ random_string }}</p>
     </div>

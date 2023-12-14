@@ -1,7 +1,9 @@
 numpy
 pandas
 pillow
-selenium
+selenium==4.9.0
 scipy
 gunicorn
 flask
+webdriver-manager==3.2.2
+webdrivermanager==0.9.0

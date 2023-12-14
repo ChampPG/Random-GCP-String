@@ -4,6 +4,7 @@ from numpy import interp
 from PIL import Image
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.common.by import By
 import pandas as pd
 from scipy.stats import entropy
 
@@ -20,7 +21,7 @@ class GcpDot:
             Returns: None
         """
 
-        self.drive_executable = Firefox_path
+        self.driveExecutable = Firefox_path
         self.stats = []
 
     def _run_headless_driver(self):
@@ -30,19 +31,23 @@ class GcpDot:
         """
         high = 0
         delay = 3
-
-        driver = webdriver.Firefox(executable_path=self.drive_executable)
+        
+        print(self.driveExecutable)
+        driver = webdriver.Firefox(executable_path=self.driveExecutable)
 
         driver.implicitly_wait(delay)
         driver.get("https://gcpdot.com/gcpchart.php")
 
         try:
             time.sleep(1)
-            chart_height = driver.find_element_by_id('gcpChartShadow').get_attribute("height")
-            dot = driver.find_elements_by_tag_name('div')[-1]
+            #chart_height = driver.find_element_by_id('gcpChartShadow').get_attribute("height")
+            chart_height = driver.find_element(By.ID, 'gcpChartShadow').get_attribute("height")
+            #dot = driver.find_elements_by_tag_name('div')[-1]
+            dot = driver.find_elements(By.TAG_NAME,'div')[-1]
             dot_id = dot.get_attribute('id')
             time.sleep(1)
-            dot_height = driver.find_element_by_id(dot_id).value_of_css_property('top')
+            #dot_height = driver.find_element_by_id(dot_id).value_of_css_property('top')
+            dot_height = driver.find_element(By.ID, dot_id).value_of_css_property('top')
             dot_height = dot_height.replace('px', '')
 
             print("Chart height: " + str(chart_height))
