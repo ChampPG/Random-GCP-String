@@ -1,5 +1,5 @@
 numpy
 pandas
-PIL
+pillow
 selenium
 scipy
