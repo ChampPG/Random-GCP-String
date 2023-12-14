@@ -7,6 +7,8 @@ from selenium.common.exceptions import TimeoutException
 import pandas as pd
 from scipy.stats import entropy
 
+# This class is based on the work of xraymemory, who created the original GCP Dot scraper
+# located here: https://github.com/xraymemory/global_consciousness_dot/tree/main
 
 class GcpDot:
     """ GcpDot class for scraping GCP Dot data """
@@ -97,6 +99,21 @@ class GcpDot:
         base.show()
         base.close()
 
+    def _get_entropy(self, labels, length=4):
+        """ Calculates the entropy of a list of labels
+        
+            labels: list of labels
+            length: int, length of the label to use for entropy calculation
+            
+            Returns: float, entropy of the list
+        """
+
+        pd_series = pd.Series(labels)
+        counts = pd_series.value_counts()
+        ent = entropy(counts)
+
+        print("Entropy stats")
+        print("Shannon Entropy: " + str(ent))
 
     def _color_switch(self, high):
         """ Returns a color based on the GCP Index
@@ -125,21 +142,25 @@ class GcpDot:
 
         return color
 
-    def _get_entropy(self, labels, length=4):
-        """ Calculates the entropy of a list of labels
+    def gather(self, limit=420, mod=5, sleep=3, output=True):
+        """ Gather GCP Index data
         
-            labels: list of labels
-            length: int, length of the label to use for entropy calculation
+            limit: int, number of samples to gather
+            mod: int, number of samples to gather before printing output
+            sleep: int, number of seconds to sleep between samples
+            output: bool, if True, print output to console
             
-            Returns: float, entropy of the list
+            Returns: None
         """
+        
+        while (limit > 0): 
+            
+            self.sample()
+            time.sleep(sleep)
 
-        pd_series = pd.Series(labels)
-        counts = pd_series.value_counts()
-        ent = entropy(counts)
-
-        print("Entropy stats")
-        print("Shannon Entropy: " + str(ent))
+            if ((len(self.stats) % mod == 0) and output):
+                for item in self.stats:
+                    print(str(item["gcp_index_shifted"]))
 
     def sample(self):
         """ Sample the GCP Dot and return the GCP Index 
@@ -164,26 +185,6 @@ class GcpDot:
             num = secrets.choice(self.stats)
 
         return num["gcp_index_shifted"]
-        
-    def gather(self, limit=420, mod=5, sleep=3, output=True):
-        """ Gather GCP Index data
-        
-            limit: int, number of samples to gather
-            mod: int, number of samples to gather before printing output
-            sleep: int, number of seconds to sleep between samples
-            output: bool, if True, print output to console
-            
-            Returns: None
-        """
-        
-        while (limit > 0): 
-            
-            self.sample()
-            time.sleep(sleep)
-
-            if ((len(self.stats) % mod == 0) and output):
-                for item in self.stats:
-                    print(str(item["gcp_index_shifted"]))
 
 if __name__ == "__main__":
     
